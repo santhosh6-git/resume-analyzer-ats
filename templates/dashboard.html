@@ -123,6 +123,18 @@
             margin-top: 10px;
         }
 
+        .faq {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .faq p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
         .history {
             margin-top: 40px;
         }
@@ -160,6 +172,27 @@
 
         <button type="submit">Analyze Resume</button>
     </form>
+
+    <!-- FAQ SECTION -->
+    <div class="faq">
+        <h3>❓ Frequently Asked Questions</h3>
+
+        <p><strong>What is a Job Description?</strong><br>
+        A job description is the text from a job posting that explains the role,
+        required skills, and responsibilities.</p>
+
+        <p><strong>Where can I get a Job Description?</strong><br>
+        You can copy it from LinkedIn, company career pages, Indeed, Internshala,
+        or any job portal.</p>
+
+        <p><strong>Why do I need to paste a Job Description?</strong><br>
+        The system compares your resume with job requirements to calculate
+        the match score and identify missing skills.</p>
+
+        <p><strong>What if I paste random or incomplete text?</strong><br>
+        The match score may be inaccurate. For best results, paste a complete
+        job description with technical skills.</p>
+    </div>
 
     {% if result %}
     <div class="result">
