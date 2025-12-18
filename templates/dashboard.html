@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Analyzer Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(120deg, #667eea, #764ba2);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin: 15px 0 5px;
+        }
+
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .result {
+            margin-top: 30px;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .progress {
+            background: #eee;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 22px;
+            margin: 10px 0 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38b2ac);
+            transition: width 0.5s ease;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .skill {
+            display: inline-block;
+            padding: 6px 14px;
+            margin: 6px 6px 0 0;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .skill.matched {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .skill.missing {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .success {
+            color: #38a169;
+            font-weight: 600;
+        }
+
+        .warning {
+            color: #d69e2e;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .history {
+            margin-top: 40px;
+        }
+
+        .history-item {
+            padding: 12px;
+            background: #f7fafc;
+            border-left: 5px solid #667eea;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #eee;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📄 Resume Analyzer</h1>
+    <p class="subtitle">Upload your resume PDF & check job matching (ATS-style)</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>Upload Resume (PDF only)</label>
+        <input type="file" name="resume" accept=".pdf" required>
+
+        <label>Job Description</label>
+        <textarea name="job" placeholder="Paste job description here..." required></textarea>
+
+        <button type="submit">Analyze Resume</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+
+        <p class="score">Match Score: {{ result.score }}%</p>
+
+        <div class="progress">
+            <div class="progress-bar" style="width: {{ result.score }}%;"></div>
+        </div>
+
+        <!-- MATCHED SKILLS -->
+        <div class="section">
+            <h3>✅ Matched Skills</h3>
+            {% if result.matched %}
+                {% for skill in result.matched %}
+                    <span class="skill matched">{{ skill }}</span>
+                {% endfor %}
+            {% else %}
+                <p>No matching skills detected.</p>
+            {% endif %}
+        </div>
+
+        <!-- MISSING SKILLS -->
+        <div class="section">
+            <h3>❌ Missing Skills</h3>
+            {% if result.missing %}
+                {% for skill in result.missing %}
+                    <span class="skill missing">{{ skill }}</span>
+                {% endfor %}
+            {% else %}
+                <p class="success">✔ Resume covers the detected job skills</p>
+            {% endif %}
+
+            {% if result.message %}
+                <p class="warning">⚠️ {{ result.message }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if history %}
+    <div class="history">
+        <h3>📊 Analysis History</h3>
+        {% for item in history %}
+            <div class="history-item">
+                <strong>{{ item.score }}%</strong> — {{ item.time }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+<footer>
+    Resume Analyzer • ATS-Style Scoring • Flask • NLP
+</footer>
+
+</body>
+</html>
